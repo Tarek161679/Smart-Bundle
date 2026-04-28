@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تطبيق التوصيات الذكية | Smart Bundle</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="mobile-frame">
+    <div class="app-header">
+        <h2>Smart Bundle ✨</h2>
+        <p>التوصيات الجينية متعددة الأهداف</p>
+    </div>
+    
+    <div class="content">
+        <div class="input-group">
+            <p style="text-align: center; margin-top: 0; color: #555;">ادخل معرّف المستخدم لتحليل جيناته وسلوكه:</p>
+            <input type="number" id="userId" placeholder="User ID (مثال: 110)">
+            <button onclick="fetchRecommendations()">توليد الباقة الذكية</button>
+        </div>
+
+        <div id="loader" class="loader">
+            <div class="spinner"></div>
+            يتم حساب الجينات وتطبيق الطفرات...
+        </div>
+
+        <div id="resultsArea"></div>
+    </div>
+</div>
+
+<script>
+    async function fetchRecommendations() {
+        const userId = document.getElementById('userId').value;
+        const loader = document.getElementById('loader');
+        const resultsArea = document.getElementById('resultsArea');
+        
+        if(!userId) {
+            alert('الرجاء إدخال رقم المستخدم أولاً!');
+            return;
+        }
+
+        loader.style.display = 'block';
+        resultsArea.innerHTML = '';
+
+        try {
+            const response = await fetch(`http://localhost:3000/api/recommend/${userId}`);
+            const data = await response.json();
+            
+            loader.style.display = 'none';
+
+            if(data.error) {
+                resultsArea.innerHTML = `<div style="color: red; text-align: center; padding: 20px;">❌ ${data.error}</div>`;
+                return;
+            }
+
+            // --- استخراج الفئات لفهم سبب اختيار الخوارزمية ---
+            // نأخذ الفئات ونزيل التكرار منها لنعرف مدى التنوع
+            const categories = data.recommendations.map(p => p.category || 'عام');
+            const uniqueCategories = [...new Set(categories)];
+            const categoriesText = uniqueCategories.join('، ');
+
+            // بناء صندوق التفسير الذكي
+            let html = `
+            <div class="success-badge">تم استخراج الجيل الأقوى للمستخدم ${data.user.user_id}</div>
+            
+            <div class="ai-reasoning">
+                <strong>🧠 تحليل الخوارزمية (لماذا هذه الباقة؟):</strong>
+                <ul>
+                    <li><strong>التنوع الجيني:</strong> نجحت الخوارزمية في دمج ${uniqueCategories.length} فئات مختلفة (${categoriesText}) لتجنب التكرار.</li>
+                    <li><strong>دالة الكفاءة (Fitness):</strong> تم اختيار هذه المنتجات لأنها حققت أعلى تطابق مع سجل نقراتك وتقييماتك السابقة.</li>
+                </ul>
+            </div>
+            `;
+            
+            // رسم بطاقات المنتجات
+            data.recommendations.forEach((prod, index) => {
+                let icon = '🛍️';
+                let cat = prod.category ? prod.category.toString().trim() : '';
+
+                switch(cat) {
+                    case 'Electronics': icon = '💻'; break;
+                    case 'Clothes': icon = '👕'; break;
+                    case 'Books': icon = '📚'; break;
+                    case 'Sports': icon = '⚽'; break;
+                    case 'Perfumes': icon = '✨'; break;
+                    case 'Home Appliances': icon = '🏠'; break;
+                    case 'Toys': icon = '🧸'; break;
+                }
+
+                html += `
+                <div class="product-card" style="animation-delay: ${index * 0.1}s">
+                    <div class="product-icon">${icon}</div>
+                    <div class="product-info">
+                        <h4>المنتج #${prod.product_id}</h4>
+                        <div class="product-meta">
+                            <span class="tag-category">${prod.category || 'تصنيف عام'}</span>
+                            <span class="tag-price">${prod.price ? prod.price + '$' : 'N/A'}</span>
+                        </div>
+                    </div>
+                </div>
+                `;
+            });
+            
+            resultsArea.innerHTML = html;
+
+        } catch (error) {
+            loader.style.display = 'none';
+            resultsArea.innerHTML = `<div style="color: red; text-align: center;">حدث خطأ في الاتصال بالخادم. تأكد من تشغيل server.js</div>`;
+        }
+    }
+</script>
+
+</body>
+</html>
