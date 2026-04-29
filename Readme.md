@@ -6,21 +6,21 @@
 
 ### 🛠 التقنيات المستخدمة (Tech Stack)
 *   **Backend:** Node.js & Express.js
-*   **Data Processing:** `xlsx` library for Excel parsing[cite: 2]
-*   **Algorithm:** Custom Multi-Objective Genetic Algorithm (JavaScript)[cite: 2]
-*   **Frontend:** Bootstrap 5 (Mobile-first design)[cite: 2]
+*   **Data Processing:** `xlsx` library for Excel parsing
+*   **Algorithm:** Custom Multi-Objective Genetic Algorithm (JavaScript)
+*   **Frontend:** Bootstrap 5 (Mobile-first design)
 
 ---
 
 ### 👥 فريق العمل (The Team)
-*   **نغم الشامي:** معالجة البيانات والـ Backend[cite: 2].
-*   **مهند أبو الفضل:** تطوير المنطق الخوارزمي (MOGA)[cite: 2].
-*   **بلال القاضي:** تصميم واجهات الموبايل وتجربة المستخدم[cite: 2].
-*   **جمان ضبيط:** ضبط الجودة والتوثيق التقني[cite: 2].
-*   **طارق زين:** إدارة المشروع وهندسة النظام[cite: 2].
+*   **نغم الشامي:** معالجة البيانات والـ Backend
+*   **مهند أبو الفضل:** تطوير المنطق الخوارزمي (MOGA)
+*   **بلال القاضي:** تصميم واجهات الموبايل وتجربة المستخدم
+*   **جمان ضبيط:** ضبط الجودة والتوثيق التقني
+*   **طارق زين:** إدارة المشروع وهندسة النظام
 
 ---
 
 ### 🚀 التشغيل السريع (Setup)
-1. تنصيب المكتبات: `npm install`[cite: 2]
-2. تشغيل الخادم: `node server.js`[cite: 2]
+1. تنصيب المكتبات: `npm install`
+2. تشغيل الخادم: `node server.js`
